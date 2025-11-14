@@ -1,9 +1,9 @@
-output "id" {
-  description = "ID of the listener"
-  value       = aws_lb_listener.this.id
+output "listener_arn" {
+  description = "Listener ARN"
+  value       = aws_lb_listener.this.arn
 }
 
-output "arn" {
-  description = "ARN of the listener"
-  value       = try(aws_lb_listener.this.arn, null)
+output "listener_id" {
+  description = "Listener ID"
+  value       = aws_lb_listener.this.id
 }

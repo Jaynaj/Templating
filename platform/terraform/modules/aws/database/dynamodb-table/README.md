@@ -1,18 +1,59 @@
-# Dynamodb Table Module
+# DynamoDB Table Module
 
-This module creates DynamoDB table.
+Creates AWS DynamoDB tables with support for GSI, LSI, streams, encryption, and auto-scaling.
+
+## Features
+
+- Pay-per-request or provisioned billing
+- Global and local secondary indexes
+- DynamoDB Streams
+- Point-in-time recovery
+- Server-side encryption with KMS
+- Auto-scaling for provisioned capacity
+- TTL support
 
 ## Usage
 
 ```hcl
-module "dynamodb_table" {
-  source = "../../modules/aws/category/dynamodb-table"
+module "users_table" {
+  source = "../../modules/aws/database/dynamodb-table"
 
-  name = "example"
+  name         = "users"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "userId"
+  range_key    = "timestamp"
+
+  attributes = [
+    {
+      name = "userId"
+      type = "S"
+    },
+    {
+      name = "timestamp"
+      type = "N"
+    },
+    {
+      name = "email"
+      type = "S"
+    }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "email-index"
+      hash_key        = "email"
+      projection_type = "ALL"
+    }
+  ]
+
+  stream_enabled   = true
+  stream_view_type = "NEW_AND_OLD_IMAGES"
+
+  point_in_time_recovery_enabled = true
+  server_side_encryption_enabled = true
 
   tags = {
     Environment = "production"
-    ManagedBy   = "terraform"
   }
 }
 ```
@@ -23,17 +64,3 @@ module "dynamodb_table" {
 |------|---------|
 | terraform | >= 1.0 |
 | aws | >= 4.0 |
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| name | Name of the resource | `string` | n/a | yes |
-| tags | Tags to apply to resources | `map(string)` | `{}` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| id | ID of the created resource |
-| arn | ARN of the created resource |

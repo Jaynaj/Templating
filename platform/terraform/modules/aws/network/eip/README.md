@@ -1,39 +1,18 @@
-# Eip Module
+# Elastic IP Module
 
-This module creates Elastic IP.
+Creates AWS Elastic IP addresses for static public IPs.
 
 ## Usage
 
 ```hcl
-module "eip" {
-  source = "../../modules/aws/category/eip"
+module "nat_eips" {
+  source = "../../modules/aws/network/eip"
 
-  name = "example"
+  name      = "nat-gateway"
+  eip_count = 3
 
   tags = {
-    Environment = "production"
-    ManagedBy   = "terraform"
+    Purpose = "NAT Gateway"
   }
 }
 ```
-
-## Requirements
-
-| Name | Version |
-|------|---------|
-| terraform | >= 1.0 |
-| aws | >= 4.0 |
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| name | Name of the resource | `string` | n/a | yes |
-| tags | Tags to apply to resources | `map(string)` | `{}` | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| id | ID of the created resource |
-| arn | ARN of the created resource |
