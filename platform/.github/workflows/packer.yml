@@ -1,0 +1,24 @@
+name: Packer Image Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'platform/packer/**'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+
+      - name: Packer Format
+        run: packer fmt -check -recursive platform/packer/
+
+      - name: Packer Validate
+        run: packer validate platform/packer/

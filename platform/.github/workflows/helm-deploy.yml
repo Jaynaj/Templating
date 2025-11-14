@@ -1,0 +1,36 @@
+name: Helm Chart Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'platform/helm/**'
+  workflow_dispatch:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+
+      - name: Helm Lint
+        run: helm lint platform/helm/charts/*
+
+      - name: Helm Template
+        run: helm template platform/helm/charts/*
+
+  deploy:
+    needs: lint-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy with Helmsman
+        run: |
+          # Add Helmsman deployment logic here
+          echo "Deploying with Helmsman..."
