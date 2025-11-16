@@ -1,10 +1,4 @@
 resource "aws_macie2_account" "this" {
-  # Configure your Macie account here
-
-  tags = merge(
-    var.tags,
-    {
-      Name = var.name
-    }
-  )
+  finding_publishing_frequency = var.finding_publishing_frequency
+  status                       = var.status
 }

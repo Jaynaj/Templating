@@ -1,5 +1,8 @@
 resource "aws_iam_policy" "this" {
-  # Configure your Managed IAM policy here
+  name        = var.name
+  description = var.description
+  policy      = var.policy
+  path        = var.path
 
   tags = merge(
     var.tags,

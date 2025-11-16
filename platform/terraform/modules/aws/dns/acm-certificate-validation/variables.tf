@@ -1,10 +1,16 @@
-variable "name" {
-  description = "Name of the resource"
+variable "certificate_arn" {
+  description = "ARN of the certificate to validate"
   type        = string
 }
 
-variable "tags" {
-  description = "Tags to apply to all resources"
-  type        = map(string)
-  default     = {}
+variable "validation_record_fqdns" {
+  description = "List of FQDNs for validation records"
+  type        = list(string)
+  default     = []
+}
+
+variable "validation_timeout" {
+  description = "Timeout for validation (e.g., 45m)"
+  type        = string
+  default     = "45m"
 }
