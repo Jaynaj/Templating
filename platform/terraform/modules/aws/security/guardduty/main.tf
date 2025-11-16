@@ -1,10 +1,24 @@
 resource "aws_guardduty_detector" "this" {
-  # Configure your GuardDuty detector here
+  enable                       = var.enable
+  finding_publishing_frequency = var.finding_publishing_frequency
 
-  tags = merge(
-    var.tags,
-    {
-      Name = var.name
+  datasources {
+    s3_logs {
+      enable = var.enable_s3_protection
     }
-  )
+    kubernetes {
+      audit_logs {
+        enable = var.enable_kubernetes_protection
+      }
+    }
+    malware_protection {
+      scan_ec2_instance_with_findings {
+        ebs_volumes {
+          enable = var.enable_malware_protection
+        }
+      }
+    }
+  }
+
+  tags = var.tags
 }
